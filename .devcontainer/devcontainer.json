@@ -1,0 +1,22 @@
+{
+    "name": "k8s-aws",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "workspaceMount": "target=/workspace,type=volume",
+    "workspaceFolder": "/workspace",
+    "mounts": [
+        {
+            "source": "${localEnv:HOME}${localEnv:USERPROFILE}/.aws",
+            "target": "/root/.aws",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:APPDATA}/GitHub CLI",
+            "target": "/root/.config/gh",
+            "type": "bind"
+        }
+    ],
+    "onCreateCommand": "gh repo clone MikeJansen/k8s-aws"
+}
