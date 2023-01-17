@@ -13,10 +13,11 @@
             "type": "bind"
         },
         {
+            // Need a cross-platform version of this.
             "source": "${localEnv:APPDATA}/GitHub CLI",
             "target": "/root/.config/gh",
             "type": "bind"
         }
     ],
-    "onCreateCommand": "gh repo clone MikeJansen/k8s-aws"
+    "onCreateCommand": "gh repo clone MikeJansen/k8s-aws ."
 }
