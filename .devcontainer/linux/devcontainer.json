@@ -1,5 +1,5 @@
 {
-    "name": "k8s-aws-windows-host",
+    "name": "k8s-aws-linux-host",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."
@@ -8,12 +8,12 @@
     "workspaceFolder": "/workspace",
     "mounts": [
         {
-            "source": "${localEnv:USERPROFILE}/.aws",
+            "source": "${localEnv:HOME}/.aws",
             "target": "/root/.aws",
             "type": "bind"
         },
         {
-            "source": "${localEnv:APPDATA}/GitHub CLI",
+            "source": "${localEnv:HOME}/.config/gh",
             "target": "/root/.config/gh",
             "type": "bind"
         }
