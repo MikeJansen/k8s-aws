@@ -24,7 +24,8 @@ pip3 install --no-cache-dir \
     ansible-lint \
     botocore \
     boto3 \
-    cfn-lint
+    cfn-lint \
+    pydot
 EOF
 
 ## kubectl
