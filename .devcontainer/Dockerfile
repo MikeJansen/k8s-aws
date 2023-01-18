@@ -20,7 +20,10 @@ apk add --no-cache \
     ansible
 
 pip3 install --no-cache-dir --upgrade pip
-pip3 install --no-cache-dir ansible-lint
+pip3 install --no-cache-dir \
+    ansible-lint \
+    botocore \
+    boto3
 EOF
 
 ## kubectl
@@ -60,9 +63,11 @@ EOF
 
 # ansible
 RUN <<EOF
-nsible-galaxy collection install \
+ansible-galaxy collection install \
     amazon.aws \
-    community.general
+    community.general \
+    community.crypto \
+    community.aws
 EOF
 
 ## Cleanup
