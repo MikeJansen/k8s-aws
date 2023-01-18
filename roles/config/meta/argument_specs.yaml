@@ -1,0 +1,17 @@
+---
+argument_specs:
+  main:
+    short_description: Default entry point
+    options:
+      config_project_base:
+        type: str
+        default: k8s-aws
+      config_project_instance:
+        type: str
+        default: default
+      config_region:
+        type: str
+        default: us-east-1
+      config_local_secrets_folder:
+        type: str
+        default: ./secrets

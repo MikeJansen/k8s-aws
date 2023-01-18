@@ -1,0 +1,69 @@
+---
+- name: Initialize
+  hosts: local
+  gather_facts: false
+  tasks:
+    - name: Initialize
+      block:
+        - name: Calculate config vars
+          ansible.builtin.include_role:
+            name: config
+            public: true
+        - name: Initialize
+          ansible.builtin.include_role:
+            name: init
+        - name: Get secrets
+          ansible.builtin.include_role:
+            name: get_secrets
+- name: Create Infrastructure
+  hosts: local
+  gather_facts: false
+  tasks:
+    - name: Create Infrastructure
+      block:
+        - name: Message
+          ansible.builtin.debug:
+            msg: This will be the terraform
+        - name: Force Error # noqa command-instead-of-shell no-changed-when
+          ansible.builtin.shell: exit 1
+          vars:
+            error: false
+          when: error
+- name: Deploy first K8s Control Plane node
+  hosts: k8s_cp0 # will be defined in aws_ec2 inventory plugin
+  tasks:
+    - name: Deploy first k8s Control Plane node
+      block:
+        - name: Message
+          ansible.builtin.debug:
+            msg: This will be deploy
+- name: Deploy remaining K8s Control Plane nodes
+  hosts: k8s_cps_secondary # will be defined in aws_ec2 inventory plugin
+  tasks:
+    - name: Deploy reamaing k8s Control Plane nodes
+      block:
+        - name: Message
+          ansible.builtin.debug:
+            msg: This will be deploy
+- name: Deploy all K8s Worker nodes
+  hosts: k8s_workers # will be defined in aws_ec2 inventory plugin
+  tasks:
+    - name: Deploy all K8s Worker nodes
+      block:
+        - name: Message
+          ansible.builtin.debug:
+            msg: This will be deploy
+- name: Cleanup
+  hosts: local
+  gather_facts: false
+  tasks:
+    - name: Cleanup
+      tags: [cleanup]
+      block:
+        - name: Calculate config vars
+          ansible.builtin.include_role:
+            name: config
+            public: true
+        - name: Delete secrets
+          ansible.builtin.include_role:
+            name: delete_secrets

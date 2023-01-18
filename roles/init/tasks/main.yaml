@@ -1,0 +1,5 @@
+---
+- name: Initialize
+  block:
+    - name: Import keypair
+      ansible.builtin.import_tasks: keypair.yaml

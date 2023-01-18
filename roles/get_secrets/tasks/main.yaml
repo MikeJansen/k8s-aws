@@ -1,0 +1,6 @@
+---
+- name: Get SSH private key
+  ansible.builtin.copy:
+    content: "{{ lookup('amazon.aws.aws_secret', config_ec2_key_pair_secret_name) }}"
+    dest: "{{ config_ssh_file }}"
+    mode: 0600

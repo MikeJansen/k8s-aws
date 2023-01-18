@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
-		"files.eol": "\n"
+		"files.eol": "\n",
+		"files.associations": {
+			"*.yaml": "ansible"
+		}
 	}
 }
