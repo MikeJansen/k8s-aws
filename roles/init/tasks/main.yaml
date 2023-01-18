@@ -3,3 +3,5 @@
   block:
     - name: Import keypair
       ansible.builtin.import_tasks: keypair.yaml
+    - name: Import terraform_s3
+      ansible.builtin.import_tasks: terraform_s3.yaml

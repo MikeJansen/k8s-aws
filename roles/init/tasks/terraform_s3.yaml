@@ -1,0 +1,6 @@
+---
+- name: Create Terraform S3 bucket
+  amazon.aws.s3_bucket:
+    acl: private
+    name: "{{ config_terraform_s3_bucket }}"
+    versioning: true

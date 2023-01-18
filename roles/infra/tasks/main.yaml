@@ -1,0 +1,9 @@
+---
+- name: Run Terraform
+  community.general.terraform:
+    project_path: terraform/
+    force_init: true
+    backend_config:
+      bucket: "{{ config_terraform_s3_bucket }}"
+      key: "{{ config_terraform_s3_key }}"
+      region: "{{ config_region }}"

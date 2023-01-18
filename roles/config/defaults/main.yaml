@@ -1,5 +1,4 @@
 ---
 config_project_base: k8s-aws
 config_project_instance: default
-config_region: us-east-1
 config_local_secrets_folder: ./secrets

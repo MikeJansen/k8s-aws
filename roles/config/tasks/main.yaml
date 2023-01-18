@@ -11,3 +11,19 @@
 - name: Set config SSH private file path
   ansible.builtin.set_fact:
     config_ssh_file: "{{ config_local_secrets_folder }}/{{ config_key_name }}"
+- name: Get AWS Account ID
+  amazon.aws.aws_caller_info:
+  register: config_caller_info
+- name: Set config AWS Account ID
+  ansible.builtin.set_fact:
+    config_aws_account_id: "{{ config_caller_info.account }}"
+- name: Set config S3 bucket and key
+  ansible.builtin.set_fact:
+    config_terraform_s3_bucket: "k8s-aws-{{ config_aws_account_id }}"
+    config_terraform_s3_key: "{{ config_project }}/terraform/state"
+- name: Get AWS AZ info
+  amazon.aws.aws_az_info:
+  register: config_aws_az_info
+- name: Get AWS Region
+  ansible.builtin.set_fact:
+    config_region: "{{ config_aws_az_info.availability_zones[0]['region_name'] }}"

@@ -20,15 +20,16 @@
   gather_facts: false
   tasks:
     - name: Create Infrastructure
+      tags: [infra]
       block:
-        - name: Message
-          ansible.builtin.debug:
-            msg: This will be the terraform
         - name: Force Error # noqa command-instead-of-shell no-changed-when
           ansible.builtin.shell: exit 1
           vars:
             error: false
           when: error
+        - name: Create Infrastructure
+          ansible.builtin.include_role:
+            name: infra
 - name: Deploy first K8s Control Plane node
   hosts: k8s_cp0 # will be defined in aws_ec2 inventory plugin
   tasks:
