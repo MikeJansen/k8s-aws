@@ -1,0 +1,16 @@
+---
+- name: Delete Terraform S3 bucket
+  amazon.aws.s3_bucket:
+    name: "{{ config_terraform_s3_bucket }}"
+    force: true
+    state: absent
+- name: Delete AWS Secrets Manager secret
+  community.aws.secretsmanager_secret:
+    name: "{{ config_ec2_key_pair_secret_name }}"
+    region: "{{ config_region }}"
+    state: absent
+- name: Delete EC2 keypair
+  amazon.aws.ec2_key:
+    name: "{{ config_key_name }}"
+    region: "{{ config_region }}"
+    state: absent

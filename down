@@ -1,0 +1,3 @@
+#!/bin/ash
+
+ansible-playbook -i inventory "$@" down.yaml || ansible-playbook -i inventory -t cleanup down.yaml

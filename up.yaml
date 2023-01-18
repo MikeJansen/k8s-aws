@@ -11,7 +11,7 @@
             public: true
         - name: Initialize
           ansible.builtin.include_role:
-            name: init
+            name: up_init
         - name: Get secrets
           ansible.builtin.include_role:
             name: get_secrets
@@ -29,7 +29,7 @@
           when: error
         - name: Create Infrastructure
           ansible.builtin.include_role:
-            name: infra
+            name: up_infra
 - name: Deploy first K8s Control Plane node
   hosts: k8s_cp0 # will be defined in aws_ec2 inventory plugin
   tasks:
