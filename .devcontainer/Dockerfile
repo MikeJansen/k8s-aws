@@ -15,6 +15,8 @@ apk add --no-cache \
     python3 \
     python3-dev \
     py3-pip \
+    openssl \
+    openssh \
     ansible
 
 pip3 install --no-cache-dir --upgrade pip
