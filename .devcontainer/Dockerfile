@@ -58,6 +58,13 @@ rm -rf \
 find /usr/local/aws-cli/v2/current/dist/awscli/botocore/data -name examples-1.json -delete 
 EOF
 
+# ansible
+RUN <<EOF
+nsible-galaxy collection install \
+    amazon.aws \
+    community.general
+EOF
+
 ## Cleanup
 RUN <<EOF
 apk --no-cache del \
