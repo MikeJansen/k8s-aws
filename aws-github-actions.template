@@ -99,6 +99,7 @@ Resources:
                     - 'ec2:*'
                     - 's3:GetObjectVersion'
                     - 'secretsmanager:TagResource'
+                    - 'secretsmanager:RestoreSecret'
                     - 'sts:GetCallerIdentity'
                   Resource: '*'
 
