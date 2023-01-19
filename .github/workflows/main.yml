@@ -30,4 +30,4 @@ jobs:
           role-session-name: GitHub-Action-Deploy
           aws-region: ${{ vars.AWS_REGION }}
 
-      - run: ./up
+      - run: ./up -e config_project_instance=github
