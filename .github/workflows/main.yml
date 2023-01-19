@@ -15,12 +15,10 @@ jobs:
       
     steps:
     
+      - run: ansible --version
       - uses: hashicorp/setup-terraform@v2
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10' 
       - run: pip install ansible-lint botocore boto3  
-      - run: ansible-galaxy collection install amazon.aws community.general community.aws
+      - run: ansible-galaxy collection install community.aws
       
       - name: Checkout repo
         uses: actions/checkout@v3
