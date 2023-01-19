@@ -1,13 +1,13 @@
-name: Deploy
+name: Up
 
 on:
   workflow_dispatch: {}
 
 jobs:
 
-  deploy:
+  up:
   
-    name: Deploy
+    name: Up
     runs-on: ubuntu-latest
     permissions:
       id-token: write
