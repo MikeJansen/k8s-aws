@@ -74,6 +74,7 @@ Resources:
                     - 'secretsmanager:GetRandomPassword'
                     - 'secretsmanager:GetSecretValue'
                     - 's3:PutBucketTagging'
+                    - 's3:PutBucketVersioning'
                     - 's3:GetObjectVersionAcl'
                     - 's3:PutBucketAcl'
                     - 's3:GetObjectTagging'
@@ -101,6 +102,8 @@ Resources:
                     - 'secretsmanager:TagResource'
                     - 'secretsmanager:RestoreSecret'
                     - 'sts:GetCallerIdentity'
+                    - 's3:HeadBucket'
+
                   Resource: '*'
 
 Outputs:
