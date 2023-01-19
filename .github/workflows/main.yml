@@ -15,6 +15,24 @@ jobs:
       
     steps:
     
+      - name: Install tools
+        run: |
+          sudo apt install -y \
+            terraform \
+            python3.9 \
+            python3.9-dev \
+            python3-pip \
+            ansible
+          pip3 install --upgrade pip
+          pip3 install \
+            ansible-lint \
+            botocore \
+            boto3 \
+          ansible-galaxy collection install \
+            amazon.aws \
+            community.general \
+            community.aws
+    
       - name: Checkout repo
         uses: actions/checkout@v3
 
@@ -25,5 +43,11 @@ jobs:
           role-session-name: GitHub-Action-Deploy
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Test
+      - name: Test AWS access
         run: aws ec2 describe-vpcs
+        
+      - name: Test Ansible
+        run: ansible --version
+        
+        
+        
