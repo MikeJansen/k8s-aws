@@ -21,7 +21,6 @@ jobs:
           python-version: '3.10' 
       - run: pip install ansible-lint botocore boto3  
       - run: ansible-galaxy collection install amazon.aws community.general community.aws
-      - run: ansible --version
       
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -33,9 +32,4 @@ jobs:
           role-session-name: GitHub-Action-Deploy
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Test AWS access
-        run: aws ec2 describe-vpcs
-       
-        
-        
-        
+      - run: ./up
