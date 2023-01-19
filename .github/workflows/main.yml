@@ -15,8 +15,11 @@ jobs:
       
     steps:
     
+      - run: terraform version -json || echo Terraform not installed on image initially
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
+      - run: sudo find / -name .terraform-version
+      - run: 'false'
       - run: pip install ansible-lint botocore boto3  
       - run: (cd collections; ansible-galaxy collection install -r requirements.yml)
       - run: ansible --version
