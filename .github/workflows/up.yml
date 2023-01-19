@@ -31,6 +31,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.IAM_ROLE }}
           role-session-name: GitHub-Action-Deploy
+          role-external-id: ${{ secrets.IAM_ROLE_EXTERNAL_ID }}
           aws-region: ${{ vars.AWS_REGION }}
 
 

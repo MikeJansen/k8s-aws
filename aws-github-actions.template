@@ -3,115 +3,130 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Cloudformation for provisioning services required to setup the CI/CD using GitHub actions.
 
 Metadata:
-
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
           default: "Github configurations"
         Parameters:
           - GithubRepoName
-          - ThumbprintList   
+          - ThumbprintList
 
 Parameters:
-
   ThumbprintList:
-    Type: String 
+    Type: String
     Default: 6938fd4d98bab03faadb97b34396831e3780aea1
     Description: A thumbprint of an Open ID Connector is a SHA1 hash of the public certificate of the host
   GithubRepoName:
-    Type: String 
+    Type: String
     Default: MikeJansen/k8s-aws
     Description: GitHub repository name Ex-TestUser/TestCodeDeploy
+  AwsAccount:
+    Type: String
+    Default: ""
+    Description: Account root to grant the role to for testing.  Leave blank to exclude.
+  ExternalId:
+    Type: String
+    Description: External ID for Role assumption
+
+Conditions:
+  HaveAwsAccount: !Not [ !Equals [ !Ref AwsAccount, "" ] ]
 
 Resources:
-
   OIDCProvider:
-      Type: AWS::IAM::OIDCProvider
-      Properties:
-          Url: "https://token.actions.githubusercontent.com"
-          ClientIdList:
-            - "sts.amazonaws.com"
-          ThumbprintList:
-             - !Ref ThumbprintList 
-  
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: "https://token.actions.githubusercontent.com"
+      ClientIdList:
+        - "sts.amazonaws.com"
+      ThumbprintList:
+        - !Ref ThumbprintList
+
   GitHubIAMRole:
-      Type: AWS::IAM::Role
-      Properties:
-          RoleName: K8S-AWS-GitHubActions-Role
-          AssumeRolePolicyDocument:
-             Statement:
-               - Effect: Allow
-                 Action: sts:AssumeRoleWithWebIdentity
-                 Principal:
-                   Federated: !Ref OIDCProvider
-                 Condition:
-                   StringLike:
-                     token.actions.githubusercontent.com:sub: !Sub repo:${GithubRepoName}:*
-          MaxSessionDuration: 3600
-          Description: "Github Actions role"
-          Policies:
-          
-          - PolicyName: ResourceManagement
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Sid: VisualEditor0
-                  Effect: Allow
-                  Action:
-                    - "ec2:AuthorizeSecurityGroupIngress"
-                    - "ec2:CreateKeyPair"
-                    - "ec2:CreateSecurityGroup"
-                    - "ec2:CreateSubnet"
-                    - "ec2:CreateVpc"
-                    - "ec2:DeleteKeyPair"
-                    - "ec2:DeleteSecurityGroup"
-                    - "ec2:DeleteSubnet"
-                    - "ec2:DeleteVpc"
-                    - "ec2:DescribeAvailabilityZones"
-                    - "ec2:DescribeKeyPairs"
-                    - "ec2:DescribeNetworkAcls"
-                    - "ec2:DescribeNetworkInterfaces"
-                    - "ec2:DescribeRouteTables"
-                    - "ec2:DescribeSecurityGroupRules"
-                    - "ec2:DescribeSecurityGroups"
-                    - "ec2:DescribeSubnets"
-                    - "ec2:DescribeVpcAttribute"
-                    - "ec2:DescribeVpcClassicLink"
-                    - "ec2:DescribeVpcClassicLinkDnsSupport"
-                    - "ec2:DescribeVpcs"
-                    - "ec2:RevokeSecurityGroupEgress"
-                    - "ec2:RevokeSecurityGroupIngress"
-                    - "iam:ListAccountAliases"
-                    - "kms:Decrypt"
-                    - "kms:GenerateDataKey"
-                    - "s3:CreateBucket"
-                    - "s3:DeleteBucket"
-                    - "s3:DeleteObject"
-                    - "s3:DeleteObjectVersion"
-                    - "s3:GetBucketOwnershipControls"
-                    - "s3:GetBucketPolicy"
-                    - "s3:GetBucketPublicAccessBlock"
-                    - "s3:GetBucketRequestPayment"
-                    - "s3:GetBucketTagging"
-                    - "s3:GetBucketVersioning"
-                    - "s3:GetEncryptionConfiguration"
-                    - "s3:GetObject"
-                    - "s3:ListBucket"
-                    - "s3:ListBucketVersions"
-                    - "s3:PutBucketAcl"
-                    - "s3:PutBucketVersioning"
-                    - "s3:PutObject"
-                    - "secretsmanager:DeleteSecret"
-                    - "secretsmanager:DescribeSecret"
-                    - "secretsmanager:GetResourcePolicy"
-                    - "secretsmanager:GetSecretValue"
-                    - "secretsmanager:RestoreSecret"
-                    - "secretsmanager:UpdateSecret"
-                    - "sts:GetCallerIdentity"
-                  Resource: '*'
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: K8S-AWS-GitHubActions-Role
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Ref OIDCProvider
+            Condition:
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GithubRepoName}:*
+              StringEquals:
+                sts:ExternalId: !Ref ExternalId
+          - Fn::If:
+              - HaveAwsAccount
+              - Effect: Allow
+                Action: sts:AssumeRole
+                Principal:
+                  AWS: !Ref AwsAccount
+              - !Ref 'AWS::NoValue'
+      MaxSessionDuration: 3600
+      Description: "Github Actions role"
+      Policies:
+        - PolicyName: ResourceManagement
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: VisualEditor0
+                Effect: Allow
+                Action:
+                  - "ec2:AuthorizeSecurityGroupIngress"
+                  - "ec2:CreateKeyPair"
+                  - "ec2:CreateSecurityGroup"
+                  - "ec2:CreateSubnet"
+                  - "ec2:CreateTags"
+                  - "ec2:CreateVpc"
+                  - "ec2:DeleteKeyPair"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:DeleteSubnet"
+                  - "ec2:DeleteVpc"
+                  - "ec2:DescribeAvailabilityZones"
+                  - "ec2:DescribeKeyPairs"
+                  - "ec2:DescribeNetworkAcls"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DescribeRouteTables"
+                  - "ec2:DescribeSecurityGroupRules"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeSubnets"
+                  - "ec2:DescribeVpcAttribute"
+                  - "ec2:DescribeVpcClassicLink"
+                  - "ec2:DescribeVpcClassicLinkDnsSupport"
+                  - "ec2:DescribeVpcs"
+                  - "ec2:RevokeSecurityGroupEgress"
+                  - "ec2:RevokeSecurityGroupIngress"
+                  - "iam:ListAccountAliases"
+                  - "kms:Decrypt"
+                  - "kms:GenerateDataKey"
+                  - "s3:CreateBucket"
+                  - "s3:DeleteBucket"
+                  - "s3:DeleteObject"
+                  - "s3:DeleteObjectVersion"
+                  - "s3:GetBucketOwnershipControls"
+                  - "s3:GetBucketPolicy"
+                  - "s3:GetBucketPublicAccessBlock"
+                  - "s3:GetBucketRequestPayment"
+                  - "s3:GetBucketTagging"
+                  - "s3:GetBucketVersioning"
+                  - "s3:GetEncryptionConfiguration"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                  - "s3:ListBucketVersions"
+                  - "s3:PutBucketAcl"
+                  - "s3:PutBucketVersioning"
+                  - "s3:PutObject"
+                  - "secretsmanager:DeleteSecret"
+                  - "secretsmanager:DescribeSecret"
+                  - "secretsmanager:GetResourcePolicy"
+                  - "secretsmanager:GetSecretValue"
+                  - "secretsmanager:RestoreSecret"
+                  - "secretsmanager:UpdateSecret"
+                  - "sts:GetCallerIdentity"
+                Resource: "*"
 
 Outputs:
-
   GithubIAMRoleArn:
     Description: IAM role for GitHub
     Value: !GetAtt GitHubIAMRole.Arn
