@@ -17,6 +17,7 @@ jobs:
     
       - name: Install tools
         run: |
+          sudo apt update -y
           sudo apt install -y \
             terraform \
             python3.9 \
