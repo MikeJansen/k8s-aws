@@ -1,0 +1,57 @@
+name: Down
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+
+  deploy:
+  
+    name: Down
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+
+
+      - name: Install Python Packages
+        run: pip install ansible-lint botocore boto3  
+        
+      - name: Install Ansible Collections from Downloaded tar files
+        run: (cd collections; ansible-galaxy collection install -r requirements.yml)
+
+
+      - name: Configure AWS Authentication
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.IAM_ROLE }}
+          role-session-name: GitHub-Action-Deploy
+          aws-region: ${{ vars.AWS_REGION }}
+
+
+      - name: Report Ansible version
+        run: ansible --version
+        
+      - name: Report Terraform version
+        run: terraform version -json
+        
+      - name: Report Python version
+        run: python --version
+        
+      - name: Report Pip version
+        run: pip --version
+        
+      - name: Report Ansible Collection list
+        run: ansible-galaxy collection list
+      
+
+      - name: 'HACK: Make secrets dir.  TODO: Put this in playbook'
+        run: mkdir -p secrets
+      
+      - name: Run Ansible playbook
+        run: ./down -e config_project_instance=github -vvvvvv
