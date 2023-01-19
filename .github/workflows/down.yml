@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  deploy:
+  down:
   
     name: Down
     runs-on: ubuntu-latest
