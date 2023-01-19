@@ -2,7 +2,7 @@
 - name: Delete Infrastructure - Terraform
   community.general.terraform:
     project_path: terraform/
-    force_init: false
+    force_init: true
     state: absent
     backend_config:
       bucket: "{{ config_terraform_s3_bucket }}"
