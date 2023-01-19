@@ -30,4 +30,5 @@ jobs:
           role-session-name: GitHub-Action-Deploy
           aws-region: ${{ vars.AWS_REGION }}
 
+      - run: mkdir -p secrets # TODO: put this in playbook
       - run: ./up -e config_project_instance=github
