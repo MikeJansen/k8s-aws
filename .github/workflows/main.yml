@@ -15,10 +15,14 @@ jobs:
       
     steps:
     
-      - run: ansible --version
       - uses: hashicorp/setup-terraform@v2
       - run: pip install ansible-lint botocore boto3  
       - run: ansible-galaxy collection install amazon.aws community.general community.aws 
+      - run: ansible --version
+      - run: terraform --version
+      - run: python --version
+      - run: pip --version
+      - run: ansible-galaxy collection list
       
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -31,4 +35,4 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - run: mkdir -p secrets # TODO: put this in playbook
-      - run: ./up -e config_project_instance=github
+      - run: ./up -e config_project_instance=github -vvvv
