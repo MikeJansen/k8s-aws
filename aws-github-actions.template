@@ -24,9 +24,6 @@ Parameters:
     Type: String
     Default: ""
     Description: Account root to grant the role to for testing.  Leave blank to exclude.
-  ExternalId:
-    Type: String
-    Description: External ID for Role assumption
 
 Conditions:
   HaveAwsAccount: !Not [ !Equals [ !Ref AwsAccount, "" ] ]
@@ -54,8 +51,6 @@ Resources:
             Condition:
               StringLike:
                 token.actions.githubusercontent.com:sub: !Sub repo:${GithubRepoName}:*
-              StringEquals:
-                sts:ExternalId: !Ref ExternalId
           - Fn::If:
               - HaveAwsAccount
               - Effect: Allow
