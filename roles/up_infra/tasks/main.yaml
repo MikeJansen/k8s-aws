@@ -10,3 +10,4 @@
     variables:
       ec2_key_name: "{{ config_key_name }}"
       aws_region: "{{ config_region }}"
+      s3_backend: true

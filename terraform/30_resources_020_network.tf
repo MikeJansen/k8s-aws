@@ -41,7 +41,7 @@ resource "aws_subnet" "cp_subnets" {
 }
 
 resource "aws_route_table_association" "cp" {
-  count = length(var.aws_subnet.cp_subnets)
+  count = length(aws_subnet.cp_subnets)
   route_table_id = aws_route_table.public.id
   subnet_id = aws_subnet.cp_subnets[count.index]
 }
@@ -59,7 +59,7 @@ resource "aws_subnet" "worker_subnets" {
 }
 
 resource "aws_route_table_association" "worker" {
-  count = length(var.aws_subnet.worker_subnets)
+  count = length(aws_subnet.worker_subnets)
   route_table_id = aws_route_table.public.id
   subnet_id = aws_subnet.worker_subnets[count.index]
 }
