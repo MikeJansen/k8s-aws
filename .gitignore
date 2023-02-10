@@ -4,3 +4,4 @@
 *.tfstate.backup
 secrets/
 tmp/
+*_override.tf
