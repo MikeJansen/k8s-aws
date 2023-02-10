@@ -22,7 +22,8 @@ apt install -y \
     python3-venv \
     openssh-client \
     ansible \
-    shellcheck
+    shellcheck \
+    unzip
 
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
@@ -33,7 +34,6 @@ apt install -y \
 
 pip install --upgrade pip
 pip install  \
-    awscliv2 \
     ansible-lint \
     boto3 \
     cfn-lint \
@@ -57,6 +57,16 @@ ansible-galaxy collection install \
     community.general \
     community.crypto \
     community.aws
+EOF
+
+# AWS CLI
+RUN <<EOF
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
+rm awscliv2.zip
+rm -rd aws
 EOF
 
 ENTRYPOINT [ "/bin/bash" ]
