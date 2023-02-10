@@ -7,3 +7,6 @@
       bucket: "{{ config_terraform_s3_bucket }}"
       key: "{{ config_terraform_s3_key }}"
       region: "{{ config_region }}"
+    variables:
+      ec2_key_name: "{{ config_key_name }}"
+      aws_region: "{{ config_region }}"

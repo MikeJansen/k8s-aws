@@ -11,6 +11,11 @@
 # to allow direct routing.
 # ----------------------------------------------------------
 
+variable "ec2_key_name" {
+  type = string
+  default = ""
+}
+
 variable "aws_region" {
   type = string
   default = "us-east-1"
@@ -80,6 +85,11 @@ variable "num_cps" {
 variable "num_workers" {
   type = number
   default = 5
+}
+
+variable "instance_type" {
+  type = string
+  default = "m6a.large"
 }
 
 variable "trusted_cidrs" {
