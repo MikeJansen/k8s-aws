@@ -19,10 +19,14 @@
         }
     ],
     "onCreateCommand": "gh repo clone MikeJansen/k8s-aws .",
-    "extensions": [
-        "redhat.ansible",
-        "github.remotehub",
-        "hashicorp.terraform",
-        "timonwong.shellcheck"
-    ]
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "redhat.ansible",
+                "github.remotehub",
+                "hashicorp.terraform",
+                "timonwong.shellcheck"
+            ]
+        }
+    }
 }
